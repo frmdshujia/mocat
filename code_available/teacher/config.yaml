@@ -1,0 +1,55 @@
+# MoCaT teacher — full configuration (matches paper Implementation Details).
+# Reproduces the reported teacher (multi-view, geometry-aware, cardiac phenotype).
+
+data:
+  dataset: UK Biobank CMR            # controlled access — NOT included
+  split: subject-level, leakage-free
+  split_sizes: {train: 55126, val: 6885, test: 6891}
+  frames: 15                         # 6 LAX (2Ch/4Ch x {ED,mid,ES}) + 9 SAX (base/mid/apex x {ED,mid,ES}); no T1
+  input_size: 224
+  normalisation: per-frame min-max to [0,1]
+
+model:
+  backbone: Hiera (sam2_tiny)
+  backbone_init: SAM2.1 pretrained (public)   # not from scratch
+  spatial_pool: 4                    # P=4 -> 16 region tokens per frame
+  embed_dim: 768
+  token_embeddings: [region, view, temporal_phase]   # additive
+  tokens: {lax: 96, sax: 144}
+  geo_fusion:
+    type: bidirectional SAX<->LAX cross-attention
+    num_heads: 4
+    bias: "-lambda * ||x_i - x_j||^2"           # x = token 3D physical coords (mm)
+    lambda: "exp(log_scale), learnable"
+    log_scale_init: -6.0                          # sigma ~ 14 mm
+    log_scale_learned: -5.68                      # sigma = 12.1 mm (anatomical scale)
+  transformer: {layers: 2, heads: 8, type: spatio-temporal global self-attention}
+  heads: per-task 2-layer MLP
+
+supervision:
+  targets: 22 cardiac phenotypes            # 14 structural + 8 functional
+  target_norm: z-standardised (train stats)
+  loss: mean per-target MSE (equal weighting)
+  disease_or_demographic_loss: none
+
+optimisation:
+  optimizer: AdamW
+  lr: {encoder: 1.0e-5, head: 1.0e-4}
+  weight_decay: 0.1
+  schedule: cosine (decay to 1% of base lr) + 2-epoch linear warmup
+  epochs: 25
+  freeze_epochs: 2                    # backbone frozen 2 epochs, then fine-tuned
+  batch_size: {frozen: 24, unfrozen: 12}
+  precision: fp16 (AMP + GradScaler)
+  hardware: single 32 GB GPU
+
+augmentation:
+  spatial: flip (H/V, p=0.5) + rotation U(-30,30)    # geometry-synchronised (see augment.py)
+  frame_dropout: 0.15
+  attn_dropout: 0.1
+  intensity: "x U(0.85,1.15); + gaussian(std 0.02) with p=0.5"
+
+model_selection:
+  metric: best validation focus-R^2   # mean of LVEF/RVEF/GLS/GCS/GRS
+  early_stopping_patience: 6
+  reported_epoch: 21

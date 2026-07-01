@@ -1,0 +1,35 @@
+# Cross-modal alignment + probe hyper-parameters.
+# These values are identical to the paper's Implementation Details and are the
+# defaults in align_infonce.py / probe.py (overridable via environment variables).
+
+alignment:
+  loss: symmetric_InfoNCE          # ECG<->CMR, both directions, averaged
+  temperature_init: 0.07           # learnable logit-scale, initialized to log(1/0.07), clamped <= 100
+  projection_head: [Linear_d_512, GELU, Linear_512_128]   # per modality (ECG and CMR)
+  projection_dim: 128
+  optimizer: AdamW
+  learning_rate: 3.0e-4
+  lr_schedule: constant            # no warm-up, no decay
+  batch_size: 64
+  max_epochs: 20                   # ViTa uses 30 (slower to converge); see paper
+  precision: bfloat16_autocast
+  seeds: [0, 1, 2]                 # 3 training seeds; Table I reports mean +/- std
+  teacher: frozen                  # pooled teacher embedding is precomputed and fixed
+  checkpoint_selection: min_validation_InfoNCE_loss   # best_valloss.ckpt
+
+ecg_student:
+  vitmae:
+    source: ViT-MAE ECG encoder (Selivanov et al., MICCAI 2025)   # cite; weights not redistributed
+    input: raw 12-lead ECG, center-cropped to 2500 samples, no normalization
+    feature: mean over patch tokens (last_hidden_state[:, 1:].mean(1))
+
+probe:
+  standardizer: StandardScaler (fit on train split only)
+  regression: RidgeCV(alphas=[0.1, 1, 10, 100, 1000])   # -> R^2
+  classification: LogisticRegression(class_weight=balanced, max_iter=2000)   # -> AUROC
+  error_bars:
+    multi_seed_rows: std over 3 training seeds
+    single_checkpoint_rows: 1000x test-set bootstrap 95% CI (fixed seed)
+  fit_split: crossmodal_train
+  eval_split: crossmodal_test      # n = 5886 paired subjects
+  tuning: none                     # identical probe for every method (tuning parity)

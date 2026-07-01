@@ -1,0 +1,10 @@
+# Consolidated dependencies for the MoCaT anonymous code.
+# (Versions to be pinned; section-specific extras are noted in each subdir's README.)
+torch
+numpy
+scipy
+pandas
+scikit-learn
+pyyaml
+pydicom          # teacher: DICOM geometry / CMR I/O
+matplotlib       # external_validation: Bland-Altman / ROC figures
