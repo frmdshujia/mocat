@@ -42,9 +42,10 @@ clinical_figures.py      # -> Fig. 4/5 panels                              (clin
 ## Notes
 
 * **Data are access-restricted** (PhysioNet EchoNext, credentialed use) and the
-  internal cohort is not public. Raw waveforms/labels and trained weights are
-  **not** redistributed here; this code is for review of the method and protocol,
-  not end-to-end execution. Weights are released on acceptance.
+  internal cohort is not public. Raw waveforms/labels are **not** redistributed
+  here. Trained encoders are available in Release v1.0.0; use the root
+  `MODEL_LOADING.md` for verified representation extraction. This archived
+  cohort pipeline requires private inputs and adaptation of its external API.
 * **External encoders are not vendored.** The ECG backbone comes from its original
   release (see the paper's references / the cross-modal-alignment module); place it
   under the path in `config.ENCODER_REPO`.
