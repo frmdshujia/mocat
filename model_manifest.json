@@ -1,0 +1,29 @@
+{
+  "mocat_teacher_seed0.pth": {
+    "model_type": "teacher",
+    "seed": 0,
+    "selected_epoch": 21,
+    "bytes": 212408288,
+    "sha256": "d6ac11f036c5a393a21badcfe48fc3a290d1a5774d7fd64495b72cdf193eb37c",
+    "original_sha256": "7c0f5a30eddf710dd42d129addfb99aed46336abad31aff08bc04de54a68e6d4",
+    "encoder_tensors_unchanged": true
+  },
+  "mocat_stmem_seed0.pth": {
+    "model_type": "stmem",
+    "seed": 0,
+    "selected_epoch": 3,
+    "bytes": 344342866,
+    "sha256": "78be054e1ed0ac8e3fbbd573ba3f3cea3a5d49b207ea93471c58c0fb376dc960",
+    "original_sha256": "b9bbbfb57ae193e8c7d67d898d7a4bb69bbe70f1d9ef09045259a9cfcdabdc50",
+    "encoder_tensors_unchanged": true
+  },
+  "mocat_vitmae_seed0.pth": {
+    "model_type": "vitmae",
+    "seed": 0,
+    "selected_epoch": 9,
+    "bytes": 80209467,
+    "sha256": "c23d2a429bb71454c2c331cde7a354748c8c9b4c63203aa3599e4e12a6f9cccb",
+    "original_sha256": "8c32853917c2b4015f1cdfb39236c7bb73fa35774e2c57f77b6cfcbba05d7e65",
+    "encoder_tensors_unchanged": true
+  }
+}

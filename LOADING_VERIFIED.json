@@ -1,0 +1,26 @@
+{
+  "teacher": {
+    "strict_load": true,
+    "synthetic_shape": [
+      1,
+      768
+    ],
+    "finite": true
+  },
+  "stmem": {
+    "strict_load": true,
+    "synthetic_shape": [
+      1,
+      768
+    ],
+    "finite": true
+  },
+  "vitmae": {
+    "strict_load": true,
+    "synthetic_shape": [
+      1,
+      512
+    ],
+    "finite": true
+  }
+}

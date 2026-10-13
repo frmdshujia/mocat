@@ -4,9 +4,9 @@ Code for the **proposed CMR teacher (MoCaT)**: a multi-view, geometry-aware card
 MRI encoder trained by multi-task phenotype regression, whose representation is later
 distilled into an ECG encoder (cross-modal alignment is provided by a separate module).
 
-> **Purpose.** Double-blind review — to inspect the method and protocol. Raw data is
-> access-controlled, so this is **not** intended to run end-to-end; the priority is
-> clarity and exact consistency with the paper's Implementation Details.
+> **Purpose.** Architecture and protocol documentation. The released teacher
+> encoder can be loaded through `../released_models.py`; see the root
+> `MODEL_LOADING.md`. Raw data and split tables remain access-controlled.
 
 ## Files → paper sections
 
@@ -39,8 +39,8 @@ and the **Hiera / SAM2** backbone (`pip install` the official `sam2` package; in
 The model consumes preprocessed UK Biobank CMR: per subject a `(16,224,224) float16 [0,1]`
 `.npy` (15 used frames), a `teacher_geom/{eid}.npz` (`token_xyz` from `geometry.py`), and a
 subject-level split `csv` with the 22 phenotype columns. **UK Biobank is access-controlled;
-raw images/labels and trained weights are not distributed here** (weights released on
-acceptance). The expected formats are documented in the file docstrings.
+raw images/labels are not distributed here**. A trained teacher checkpoint is now
+available in Release v1.0.0. The expected formats are documented in the file docstrings.
 
 ## Reproducing the ablations
 

@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+external/
+weights/
+*.pth
+*.ckpt
+*.pt
+*.npy
+*.npz
+.DS_Store

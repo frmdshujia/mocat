@@ -5,8 +5,10 @@ Code for the cross-modal alignment and evaluation of Table I. It trains an ECG
 the aligned ECG encoder on paired-cohort phenotypes and disease endpoints.
 
 This directory contains **only the proposed method and its evaluation protocol**.
-It is provided for double-blind review to verify method and protocol; it is not
-meant to run end-to-end (data and pretrained weights are access-restricted).
+The archived engine implements the ViT-MAE variant. Both ST-MEM and ViT-MAE
+aligned checkpoints are now released, with separate strict loaders in
+`../released_models.py` and instructions in the root `MODEL_LOADING.md`.
+Full cohort training/evaluation requires authorized data and split tables.
 
 ## Method
 
@@ -33,12 +35,12 @@ same `fit = crossmodal_train` / `eval = crossmodal_test` (n = 5886):
 - phenotypes → `RidgeCV(alphas=[0.1,1,10,100,1000])` → R²;
 - disease endpoints → `LogisticRegression(class_weight=balanced)` → AUROC.
 
-No per-method model selection is performed. Upstream, every CMR teacher is fed
-the **identical 15-frame / 5-view CMR input** and reduced to a frozen pooled
-embedding; only the teacher then changes. This isolates *teacher quality* and is
-the fairness protocol described in the paper. Error bars: std over 3 training
-seeds (aligned rows) or a 1000× test-set bootstrap 95% CI (single-checkpoint
-rows).
+Read the root README for result provenance: the main table's MoCaT phenotype
+means correspond to the ST-MEM variant, while the separately released ViT-MAE
+variant has its own results. Only comparisons using the same student hold the
+ECG architecture fixed. Input configuration and training budget may differ among
+CMR teachers. Bootstrap intervals and across-seed standard deviations are distinct
+uncertainty summaries; consult the actual scorecard field and figure caption.
 
 ## Files
 
@@ -69,5 +71,5 @@ ECG state in `ck['ecg']`) → `extract_ecg_vitmae.py` (train + test features) �
 - All paths in the scripts are placeholders (`./data`, `./features`, `./weights`,
   …) and/or read from environment variables (`SPLIT_DIR`, `ECG_BASE`, `EMB_DIR`,
   `TEACHER`, `OUT`, `VITMAE_W`). Point them at your local checkout.
-- No UK Biobank / external data, and no trained weights, are included (to be
-  released upon acceptance).
+- No UK Biobank / external data are included. The teacher and both aligned ECG
+  variants are available as GitHub Release assets, not committed Git blobs.

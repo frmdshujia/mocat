@@ -1,11 +1,10 @@
-# MoCaT — Anonymous Code for Double-Blind Review
+# MoCaT — Research Code and Released Encoders
 
-Code accompanying the submission on **MoCaT** (a Motion-aware Cardiac Teacher for
-ECG–CMR representation learning). It is released **for double-blind review** so that
-reviewers can verify the method and evaluation protocol. Because the underlying data
-and pretrained weights are access-restricted, the code is **not intended to run
-end-to-end**; it documents the exact architecture, training recipe, and metrics used
-in the paper.
+Code accompanying **MoCaT** (a Motion-aware Cardiac Teacher for ECG–CMR
+representation learning). The original review scripts document the architecture
+and protocol. Three trained encoder variants and verified inference loaders are
+now available; see the repository-root README and MODEL_LOADING.md. Full cohort
+training/evaluation still requires authorized datasets and private split tables.
 
 ## Contents
 
@@ -20,8 +19,9 @@ it expects (data paths, teacher embeddings, released baseline weights).
 
 ## Configuration ↔ paper
 
-All hyperparameters live in the per-section configs and **match the paper's
-Implementation Details**:
+The per-section configs document the archived implementation. For the released
+teacher, the checkpoint configuration records 25 configured epochs and selection
+at epoch 21; this differs from the pre-release manuscript's 40-epoch description:
 - `teacher/config.yaml` — teacher pretraining (optimizer, cosine schedule + warmup,
   epochs, backbone freezing, batch sizes, geometric-bias initialisation, model
   selection criterion).
@@ -33,7 +33,7 @@ Implementation Details**:
 - **UK Biobank** (teacher training / Table I): access-restricted; obtain through the
   UK Biobank application process and point the path variables at your local copy.
 - **EchoNext** (Table II): available from PhysioNet under its data-use agreement.
-- **Trained weights** (teacher and aligned ECG encoders): **released upon acceptance.**
+- **Trained weights** (teacher, aligned ST-MEM and ViT-MAE): available in GitHub Release v1.0.0; see the root README for model-specific result provenance.
 - **Baseline encoders** (ViT-MAE ECG, CineMA, CMR-T, DiffAE, ViTa, …) are obtained
   from their official repositories/checkpoints and are **not** redistributed here.
 
@@ -43,5 +43,5 @@ Python 3.10 + PyTorch; see `requirements.txt`. Section-specific extras (the
 Hiera/SAM2 backbone, the ViT-MAE ECG encoder, etc.) follow their official
 repositories — see each subdirectory's README.
 
-_No author, institution, or other identifying information is included, in accordance
-with double-blind review._
+The original anonymous review code is retained in this directory; root-level
+release documentation describes the accepted paper and publicly released assets.
